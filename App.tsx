@@ -26,9 +26,9 @@ function App() {
     const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smooth: true,
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
         smoothTouch: false,
         touchMultiplier: 2,
     });
