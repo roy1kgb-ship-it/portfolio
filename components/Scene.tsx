@@ -18,8 +18,6 @@ declare global {
       boxGeometry: any;
       meshBasicMaterial: any;
       fog: any;
-      // Allow any other element (fixes div, span, etc. missing errors)
-      [elemName: string]: any;
     }
   }
   // Augment React.JSX namespace as well for newer React type definitions
@@ -37,8 +35,6 @@ declare global {
         boxGeometry: any;
         meshBasicMaterial: any;
         fog: any;
-        // Allow any other element
-        [elemName: string]: any;
       }
     }
   }
@@ -89,11 +85,11 @@ const CoreGeometry = () => {
       <group>
         <mesh ref={innerRingRef}>
             <torusGeometry args={[1.8, 0.02, 16, 100]} />
-            <meshStandardMaterial color="#404040" metalness={1} roughness={0} />
+            <meshStandardMaterial color="#404040" metalness={1} roughness={0.1} />
         </mesh>
         <mesh ref={midRingRef}>
             <torusGeometry args={[2.2, 0.02, 16, 100]} />
-            <meshStandardMaterial color="#606060" metalness={1} roughness={0} />
+            <meshStandardMaterial color="#606060" metalness={1} roughness={0.1} />
             {/* Tech Markers on Ring */}
             <mesh position={[2.2, 0, 0]}>
                 <boxGeometry args={[0.1, 0.1, 0.1]} />

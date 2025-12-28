@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Lenis from 'lenis';
+import Lenis from '@studio-freight/lenis';
 import { Navigation } from './components/Navigation';
 import { Scene } from './components/Scene';
 import { CustomCursor } from './components/CustomCursor';
