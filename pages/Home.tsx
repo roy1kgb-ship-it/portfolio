@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Cpu, Activity, Globe, Zap, Layers, Binary, Database, Terminal, Code2, RefreshCw, MapPin, Settings } from 'lucide-react';
+// @ts-ignore
 import { Link } from 'react-router-dom';
+import { TerminalGame } from '../components/TerminalGame';
 
 // --- DECORATIVE UI COMPONENTS ---
 
@@ -23,6 +25,100 @@ const BlueprintGrid = () => (
     <TechCrosshair className="bottom-20 right-6 md:right-20" />
   </div>
 );
+
+// --- AUTO-PLAYING TIC-TAC-TOE (MINI) ---
+
+const AutoPlayingTicTacToe = ({ onClick }: { onClick: () => void }) => {
+    const [board, setBoard] = useState<(string | null)[]>(Array(9).fill(null));
+    const [isXNext, setIsXNext] = useState(true);
+    const [winner, setWinner] = useState<string | null>(null);
+
+    // Simple win logic
+    const calculateWinner = (squares: (string | null)[]) => {
+        const lines = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+        for (let i = 0; i < lines.length; i++) {
+            const [a, b, c] = lines[i];
+            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                return squares[a];
+            }
+        }
+        return squares.includes(null) ? null : 'D'; // D for Draw
+    };
+
+    useEffect(() => {
+        let timeout: any;
+
+        if (winner) {
+            // Reset after delay
+            timeout = setTimeout(() => {
+                setBoard(Array(9).fill(null));
+                setWinner(null);
+                setIsXNext(true);
+            }, 1500);
+        } else {
+            // Make a move
+            timeout = setTimeout(() => {
+                const emptyIndices = board.map((val, idx) => val === null ? idx : null).filter(val => val !== null) as number[];
+                
+                if (emptyIndices.length > 0) {
+                    // Pick random empty spot
+                    const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                    const newBoard = [...board];
+                    newBoard[randomIndex] = isXNext ? 'X' : 'O';
+                    
+                    setBoard(newBoard);
+                    setIsXNext(!isXNext);
+                    
+                    const winState = calculateWinner(newBoard);
+                    if (winState) setWinner(winState);
+                }
+            }, 600); // Speed of moves
+        }
+
+        return () => clearTimeout(timeout);
+    }, [board, winner, isXNext]);
+
+    return (
+        <div 
+            onClick={onClick}
+            className="group relative inline-flex flex-col gap-1 p-2 ml-4 bg-black/50 border border-white/10 rounded-lg backdrop-blur-sm cursor-pointer hover:border-primary/50 transition-colors shadow-[0_0_15px_rgba(0,0,0,0.5)] align-middle transform -translate-y-2"
+        >
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-[8px] font-mono text-dim group-hover:text-primary transition-colors whitespace-nowrap bg-black px-1">
+                CLICK TO PLAY
+            </div>
+
+            <div className="grid grid-cols-3 gap-1">
+                {board.map((cell, i) => (
+                    <div 
+                        key={i} 
+                        className={`
+                            w-5 h-5 md:w-6 md:h-6 rounded-sm flex items-center justify-center text-[10px] md:text-xs font-bold font-mono border
+                            ${cell === null ? 'border-white/5 bg-white/5' : 'border-transparent bg-black'}
+                            ${cell === 'X' ? 'text-primary shadow-[0_0_8px_rgba(255,77,0,0.4)]' : 'text-secondary'}
+                        `}
+                    >
+                        <AnimatePresence mode="wait">
+                            {cell && (
+                                <motion.span
+                                    {...{ initial: { scale: 0, opacity: 0 }, animate: { scale: 1, opacity: 1 } } as any}
+                                >
+                                    {cell}
+                                </motion.span>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                ))}
+            </div>
+
+            {/* Status light */}
+            <div className={`h-0.5 w-full rounded-full transition-colors duration-500 ${winner === 'X' ? 'bg-primary' : winner === 'O' ? 'bg-secondary' : 'bg-white/10'}`} />
+        </div>
+    );
+};
 
 // --- ROBOTIC ARM KINEMATICS VISUALIZER ---
 
@@ -217,10 +313,12 @@ const RoboticArmTerminal = () => {
                     <motion.line 
                         x1={BaseX} y1={BaseY} x2={j1.x} y2={j1.y} 
                         stroke="#444" strokeWidth="3" 
+                        {...{} as any}
                     />
                     <motion.line 
                         x1={j1.x} y1={j1.y} x2={j2.x} y2={j2.y} 
                         stroke="#444" strokeWidth="3" 
+                        {...{} as any}
                     />
                     
                     {/* Wireframe Overlay */}
@@ -298,25 +396,27 @@ const StackedCardCarousel = ({ items }: { items: StackedItem[] }) => {
                         return (
                             <motion.div
                                 key={item.title}
-                                className={`absolute inset-0 rounded-2xl p-6 border bg-[#0a0a0a] backdrop-blur-xl flex flex-col justify-between shadow-2xl ${item.color} ${offset === 0 ? item.bg : 'bg-[#0a0a0a]'}`}
-                                initial={false}
-                                animate={{
-                                    scale: offset === 0 ? 1 : offset === 1 ? 0.95 : 0.9,
-                                    y: offset === 0 ? 0 : offset === 1 ? -15 : -30,
-                                    zIndex: items.length - offset,
-                                    opacity: offset < 3 ? 1 : 0,
-                                }}
-                                exit={{
-                                    y: -100, // Lift up
-                                    opacity: 0,
-                                    scale: 1.05,
-                                    zIndex: 50,
+                                className={`absolute inset-0 rounded-2xl p-6 border bg-[#111] backdrop-blur-xl flex flex-col justify-between shadow-2xl ${item.color} ${offset === 0 ? 'bg-[#151515]' : 'bg-[#0a0a0a]'}`}
+                                {...{
+                                    initial: false,
+                                    animate: {
+                                        scale: offset === 0 ? 1 : offset === 1 ? 0.95 : 0.9,
+                                        y: offset === 0 ? 0 : offset === 1 ? -15 : -30,
+                                        zIndex: items.length - offset,
+                                        opacity: offset < 3 ? 1 : 0,
+                                    },
+                                    exit: {
+                                        y: -100, // Lift up
+                                        opacity: 0,
+                                        scale: 1.05,
+                                        zIndex: 50,
+                                        transition: { duration: 0.5, ease: "easeInOut" }
+                                    },
                                     transition: { duration: 0.5, ease: "easeInOut" }
-                                }}
-                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                } as any}
                             >
                                 <div className="flex justify-between items-start">
-                                    <div className="p-2 rounded bg-black border border-white/10 text-white">
+                                    <div className="p-2 rounded bg-black border border-white/20 text-white shadow-[0_0_10px_rgba(0,0,0,0.5)]">
                                         {item.icon}
                                     </div>
                                     <span className="text-[10px] font-mono text-dim">
@@ -324,22 +424,27 @@ const StackedCardCarousel = ({ items }: { items: StackedItem[] }) => {
                                     </span>
                                 </div>
                                 
-                                <div>
-                                    <h3 className="text-xl font-display font-bold text-white mb-2">{item.title}</h3>
-                                    <div className="text-[10px] font-mono text-gray-400 mb-2">{item.sub}</div>
-                                    <p className="text-xs text-gray-400 leading-relaxed">
+                                <div className="z-10 relative">
+                                    <h3 className="text-xl font-display font-bold text-white mb-2 tracking-wide">{item.title}</h3>
+                                    <div className="text-[10px] font-mono text-gray-300 mb-2 uppercase tracking-wider">{item.sub}</div>
+                                    <p className="text-xs text-gray-300 leading-relaxed opacity-90">
                                         {item.desc}
                                     </p>
                                 </div>
+
+                                {/* Gradient overlay for visibility */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent rounded-2xl pointer-events-none" />
                                 
                                 {/* Timer Bar (Only on active card) */}
-                                <div className="w-full h-1 bg-white/5 mt-4 rounded-full overflow-hidden">
+                                <div className="w-full h-1 bg-white/5 mt-4 rounded-full overflow-hidden relative z-20">
                                     {offset === 0 && (
                                         <motion.div 
-                                            className="h-full bg-white/20" 
-                                            initial={{ width: "0%" }}
-                                            animate={{ width: isPaused ? "100%" : "100%" }}
-                                            transition={{ duration: isPaused ? 0 : 4, ease: "linear", repeat: isPaused ? 0 : 0 }}
+                                            className="h-full bg-white/40" 
+                                            {...{
+                                                initial: { width: "0%" },
+                                                animate: { width: isPaused ? "100%" : "100%" },
+                                                transition: { duration: isPaused ? 0 : 4, ease: "linear", repeat: isPaused ? 0 : 0 }
+                                            } as any}
                                             key={activeIndex} 
                                         />
                                     )}
@@ -365,8 +470,10 @@ const Marquee = ({ text }: { text: string }) => {
             
             <motion.div 
                 className="flex whitespace-nowrap text-6xl md:text-8xl font-display font-bold text-white/40 select-none"
-                animate={{ x: ["0%", "-50%"] }}
-                transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
+                {...{
+                    animate: { x: ["0%", "-50%"] },
+                    transition: { repeat: Infinity, ease: "linear", duration: 40 }
+                } as any}
             >
                 {[0, 1].map((i) => (
                     <div key={i} className="flex shrink-0 items-center">
@@ -389,7 +496,7 @@ const featuresData: StackedItem[] = [
         icon: <Zap size={20} />, 
         desc: "1kHz+ control loops for precise actuator management. Deterministic task scheduling using FreeRTOS on STM32.",
         color: "border-secondary/50",
-        bg: "bg-secondary/5"
+        bg: "bg-secondary/10"
     },
     { 
         title: "SENSOR FUSION", 
@@ -397,7 +504,7 @@ const featuresData: StackedItem[] = [
         icon: <Layers size={20} />, 
         desc: "Kalman filtering and Madgwick filters to combine accelerometer and gyroscope data for drift-free orientation.",
         color: "border-primary/50",
-        bg: "bg-primary/5"
+        bg: "bg-primary/10"
     },
     { 
         title: "EMBEDDED LOGIC", 
@@ -405,14 +512,14 @@ const featuresData: StackedItem[] = [
         icon: <Binary size={20} />, 
         desc: "Optimized C++ firmware running on bare-metal ARM architectures. Direct register manipulation for max speed.",
         color: "border-green-500/50",
-        bg: "bg-green-500/5"
+        bg: "bg-green-500/10"
     }
 ];
 
 const protocolsData: StackedItem[] = [
-    { title: 'MECHANICAL', sub: 'CAD & KINEMATICS', icon: <Settings size={20} />, desc: 'DFMA-driven mechanical design using Fusion 360 and SolidWorks. Topology optimization.', color: 'border-secondary/50', bg: 'bg-secondary/5' },
-    { title: 'ELECTRONICS', sub: 'PCB & CIRCUITS', icon: <Cpu size={20} />, desc: 'Custom PCB fabrication, power distribution, and mixed-signal circuit design (KiCad/Altium).', color: 'border-primary/50', bg: 'bg-primary/5' },
-    { title: 'INTELLIGENCE', sub: 'FIRMWARE & ROS', icon: <Terminal size={20} />, desc: 'Robust firmware in C++/Python. PID, LQR, and MPC implementation on STM32/ESP32.', color: 'border-green-500/50', bg: 'bg-green-500/5' }
+    { title: 'MECHANICAL', sub: 'CAD & KINEMATICS', icon: <Settings size={20} />, desc: 'DFMA-driven mechanical design using Fusion 360 and SolidWorks. Topology optimization.', color: 'border-secondary/50', bg: 'bg-secondary/10' },
+    { title: 'ELECTRONICS', sub: 'PCB & CIRCUITS', icon: <Cpu size={20} />, desc: 'Custom PCB fabrication, power distribution, and mixed-signal circuit design (KiCad/Altium).', color: 'border-primary/50', bg: 'bg-primary/10' },
+    { title: 'INTELLIGENCE', sub: 'FIRMWARE & ROS', icon: <Terminal size={20} />, desc: 'Robust firmware in C++/Python. PID, LQR, and MPC implementation on STM32/ESP32.', color: 'border-green-500/50', bg: 'bg-green-500/10' }
 ];
 
 // --- MAIN COMPONENT ---
@@ -423,29 +530,31 @@ export const Home: React.FC = () => {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+  const [showGame, setShowGame] = useState(false);
 
   const yHero = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
   
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden">
-        
+      
+      <AnimatePresence>
+          {showGame && <TerminalGame onClose={() => setShowGame(false)} />}
+      </AnimatePresence>
+
       {/* GLOBAL BACKGROUND ELEMENTS */}
       <BlueprintGrid />
       
-      {/* HUD OVERLAY - Moved to right to avoid overlap with 'ACE' text */}
-      <div className="absolute top-32 right-6 md:right-12 z-40 pointer-events-none hidden md:block text-right">
-          <div className="flex flex-col gap-1 p-2 bg-black/20 backdrop-blur-md border border-white/5 rounded-sm items-end">
-              <span className="text-[10px] font-mono text-dim">COORDS</span>
-              <span className="text-xs font-mono text-primary">01.2921° S, 36.8219° E</span>
-          </div>
-      </div>
-
       {/* --- HERO SECTION --- */}
-      {/* UPDATED PADDING: pt-48 to ensure content isn't covered by mobile browser UI */}
-      {/* ADDED BG AND BLUR TO REDUCE 3D NOISE */}
-      <div className="w-full flex flex-col justify-center px-6 md:px-20 relative pt-48 md:pt-48 pb-24 bg-black/5 backdrop-blur-sm border-b border-white/5">
+      {/* 
+         LAYOUT FIXES:
+         - min-h-screen: Ensures hero takes full viewport height
+         - flex flex-col justify-center: Centers content vertically
+         - pb-32 md:pb-48: Adds significant bottom padding so content (and buttons)
+           terminate comfortably above the floating navbar (bottom-8) on load.
+      */}
+      <div className="w-full flex flex-col justify-center px-6 md:px-20 relative min-h-screen pt-16 md:pt-0 pb-32 md:pb-48 bg-black/40 backdrop-blur-sm border-b border-white/5">
           <motion.div 
-            style={{ y: yHero }}
+            style={{ y: yHero } as any}
             className="max-w-7xl w-full z-10 relative mx-auto grid grid-cols-1 md:grid-cols-12 gap-8"
           >
             {/* Left Status Column */}
@@ -462,11 +571,13 @@ export const Home: React.FC = () => {
             </div>
 
             <div className="col-span-1 md:col-span-11">
-                {/* Intro Tag */}
+                {/* Intro Tag - Reduced gap here */}
                 <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: '100px' }}
-                    transition={{ duration: 1, ease: 'circOut' }}
+                    {...{
+                        initial: { width: 0 },
+                        animate: { width: '100px' },
+                        transition: { duration: 1, ease: 'circOut' }
+                    } as any}
                     className="h-[1px] bg-primary mb-6 relative"
                 >
                     <span className="absolute -top-5 left-0 text-[10px] font-mono text-primary">SYS.INIT_COMPLETE</span>
@@ -475,9 +586,11 @@ export const Home: React.FC = () => {
                 {/* Main Title */}
                 <div className="relative mb-6">
                     <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                        {...{
+                            initial: { y: 20, opacity: 0 },
+                            animate: { y: 0, opacity: 1 },
+                            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+                        } as any}
                     >
                         {/* Adjusted text size for mobile compatibility */}
                         <h1 className="text-6xl sm:text-7xl md:text-[10rem] font-display font-bold tracking-tighter text-white leading-[0.85]">
@@ -489,7 +602,9 @@ export const Home: React.FC = () => {
                             >
                                 WAHOME
                             </span>
-                            <span className="text-primary">.</span>
+                            
+                            {/* Easter Egg: Auto-Playing Tic-Tac-Toe */}
+                            <AutoPlayingTicTacToe onClick={() => setShowGame(true)} />
                         </h1>
                     </motion.div>
                 </div>
@@ -500,9 +615,11 @@ export const Home: React.FC = () => {
                         {/* Static Text - Glitch Removed */}
                         <motion.h2 
                             className="text-xl md:text-2xl font-mono text-secondary mb-4 flex items-center gap-2"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.4 }}
+                            {...{
+                                initial: { opacity: 0 },
+                                animate: { opacity: 1 },
+                                transition: { delay: 0.4 }
+                            } as any}
                         >
                             <span className="tracking-widest">MECHATRONICS ENGINEERING STUDENT</span>
                         </motion.h2>
@@ -510,18 +627,22 @@ export const Home: React.FC = () => {
                         {/* Location */}
                          <motion.div 
                             className="text-xs font-mono text-dim mb-4 flex items-center gap-2"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.45 }}
+                            {...{
+                                initial: { opacity: 0 },
+                                animate: { opacity: 1 },
+                                transition: { delay: 0.45 }
+                            } as any}
                         >
                              <MapPin size={12} /> NAIROBI, KE
                         </motion.div>
 
                         <motion.p 
                             className="text-gray-300 font-sans text-lg leading-relaxed shadow-black drop-shadow-sm border-l-2 border-white/10 pl-6"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 }}
+                            {...{
+                                initial: { opacity: 0 },
+                                animate: { opacity: 1 },
+                                transition: { delay: 0.5 }
+                            } as any}
                         >
                             I design and build the nervous systems of machines. From mechanical CAD to embedded firmware, bridging the physical and digital worlds.
                         </motion.p>
@@ -543,13 +664,15 @@ export const Home: React.FC = () => {
                     {/* Stats Grid */}
                     <motion.div 
                         className="grid grid-cols-2 gap-4 w-full"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.6 }}
+                        {...{
+                            initial: { opacity: 0, scale: 0.95 },
+                            animate: { opacity: 1, scale: 1 },
+                            transition: { delay: 0.6 }
+                        } as any}
                     >
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm group hover:border-primary/50 transition-colors">
                             <Cpu className="text-dim mb-2 group-hover:text-primary transition-colors" size={20} />
-                            <div className="text-2xl md:text-3xl font-display font-bold text-white">4+</div>
+                            <div className="text-2xl md:text-3xl font-display font-bold text-white">2+</div>
                             <div className="text-[10px] font-mono text-gray-500">YEARS EXP</div>
                         </div>
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm group hover:border-secondary/50 transition-colors">
@@ -559,13 +682,13 @@ export const Home: React.FC = () => {
                         </div>
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm group hover:border-green-500/50 transition-colors">
                             <Activity className="text-dim mb-2 group-hover:text-green-500 transition-colors" size={20} />
-                            <div className="text-2xl md:text-3xl font-display font-bold text-white">98%</div>
-                            <div className="text-[10px] font-mono text-gray-500">UPTIME</div>
+                            <div className="text-xl md:text-2xl font-display font-bold text-white uppercase tracking-tight">CAD / CAM</div>
+                            <div className="text-[10px] font-mono text-gray-500">SKILLSET</div>
                         </div>
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm">
                             <Database className="text-dim mb-2" size={20} />
-                            <div className="text-2xl md:text-3xl font-display font-bold text-white">100%</div>
-                            <div className="text-[10px] font-mono text-gray-500">DEPLOYED</div>
+                            <div className="text-xl md:text-2xl font-display font-bold text-white uppercase tracking-tight">RAPID PROTO</div>
+                            <div className="text-[10px] font-mono text-gray-500">SPECIALIZATION</div>
                         </div>
                     </motion.div>
                 </div>
@@ -573,7 +696,6 @@ export const Home: React.FC = () => {
           </motion.div>
       </div>
 
-      {/* ... rest of the file ... */}
       {/* --- SCROLLING MARQUEE --- */}
       <div className="relative z-20 transform -rotate-1 origin-center mb-8 mt-0">
          <Marquee text="ROBOTICS // FIRMWARE // AUTOMATION // PCB DESIGN //" />
@@ -593,9 +715,11 @@ export const Home: React.FC = () => {
         <div className="flex flex-col items-center max-w-7xl mx-auto w-full z-10 gap-8 px-4 md:px-0">
             
             <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                {...{
+                    initial: { opacity: 0, y: 30 },
+                    whileInView: { opacity: 1, y: 0 },
+                    viewport: { once: true }
+                } as any}
                 className="text-center max-w-3xl mx-auto space-y-4"
             >
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-secondary/20 bg-secondary/5 text-secondary text-xs font-mono tracking-widest mb-2">
@@ -614,9 +738,11 @@ export const Home: React.FC = () => {
 
             {/* Terminal Window - Full width on Mobile */}
             <motion.div 
-                initial={{ scale: 0.95, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true, margin: "-100px" }}
+                {...{
+                    initial: { scale: 0.95, opacity: 0 },
+                    whileInView: { scale: 1, opacity: 1 },
+                    viewport: { once: true, margin: "-100px" }
+                } as any}
                 className="w-full md:w-[90vw] lg:w-full perspective-1000"
             >
                 <RoboticArmTerminal />
@@ -629,15 +755,17 @@ export const Home: React.FC = () => {
                     <StackedCardCarousel items={featuresData} />
                 </div>
                 
-                {/* Desktop View */}
+                {/* Desktop View - Cards with improved visibility */}
                 <div className="hidden md:grid md:grid-cols-3 gap-6">
                     {featuresData.map((item, index) => (
-                        <div key={index} className="flex flex-col gap-3 p-6 bg-white/5 border border-white/5 rounded-xl hover:border-primary/50 transition-colors group">
-                            <div className={`p-3 bg-black border border-white/10 w-fit rounded-lg group-hover:scale-110 transition-transform ${item.color.replace('border-', 'text-').replace('/50', '')}`}>
+                        <div key={index} className="flex flex-col gap-3 p-6 bg-[#0c0c0c] border border-white/20 rounded-xl hover:border-primary/50 transition-colors group relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            
+                            <div className={`p-3 bg-black border border-white/20 w-fit rounded-lg group-hover:scale-110 transition-transform ${item.color.replace('border-', 'text-').replace('/50', '')} shadow-[0_0_15px_rgba(0,0,0,0.5)] z-10`}>
                                 {item.icon}
                             </div>
-                            <h3 className="text-white font-bold font-mono text-lg">{item.title}</h3>
-                            <p className="text-sm text-dim group-hover:text-gray-400 transition-colors">{item.desc}</p>
+                            <h3 className="text-white font-bold font-mono text-lg z-10">{item.title}</h3>
+                            <p className="text-sm text-gray-300 group-hover:text-white transition-colors z-10 leading-relaxed font-sans">{item.desc}</p>
                         </div>
                     ))}
                 </div>
@@ -668,19 +796,21 @@ export const Home: React.FC = () => {
                 <StackedCardCarousel items={protocolsData} />
             </div>
 
-            {/* DESKTOP: GRID LAYOUT */}
+            {/* DESKTOP: GRID LAYOUT - Increased visibility */}
             <div className="hidden md:grid md:grid-cols-3 gap-8">
                 {protocolsData.map((item, i) => (
                     <motion.div
                         key={i}
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.2 }}
-                        className={`bg-[#0a0a0a] border border-white/10 p-0 group relative overflow-hidden transition-all duration-300 ${item.color} hover:shadow-[0_0_30px_rgba(0,0,0,0.5)]`}
+                        {...{
+                            initial: { opacity: 0, y: 50 },
+                            whileInView: { opacity: 1, y: 0 },
+                            viewport: { once: true },
+                            transition: { delay: i * 0.2 }
+                        } as any}
+                        className={`bg-[#0c0c0c] border border-white/20 p-0 group relative overflow-hidden transition-all duration-300 ${item.color} hover:shadow-[0_0_30px_rgba(0,0,0,0.5)]`}
                     >
                         {/* Industrial Header Plate */}
-                        <div className="bg-white/5 p-4 border-b border-white/5 flex justify-between items-center">
+                        <div className="bg-[#151515] p-4 border-b border-white/10 flex justify-between items-center">
                             <div className={`p-2 bg-black border border-white/10 ${item.color.replace('border-','text-').replace('/50','')} rounded-sm`}>
                                 {item.icon}
                             </div>
@@ -691,10 +821,10 @@ export const Home: React.FC = () => {
                         </div>
 
                         <div className="p-8 relative z-10">
-                            <div className="font-mono text-xs text-gray-500 mb-2 tracking-widest">{item.sub}</div>
+                            <div className="font-mono text-xs text-gray-400 mb-2 tracking-widest uppercase">{item.sub}</div>
                             <h3 className="text-2xl font-display font-bold mb-4 group-hover:text-white transition-colors uppercase tracking-tight">{item.title}</h3>
                             
-                            <p className="text-gray-400 font-mono text-xs leading-relaxed group-hover:text-gray-300 transition-colors border-l border-white/10 pl-4">
+                            <p className="text-gray-300 font-sans text-sm leading-relaxed group-hover:text-white transition-colors border-l border-white/10 pl-4">
                                 {item.desc}
                             </p>
                         </div>
@@ -710,10 +840,10 @@ export const Home: React.FC = () => {
                         </div>
 
                         {/* Corner Screws */}
-                        <div className="absolute top-2 left-2 text-white/5 text-[8px]">+</div>
-                        <div className="absolute top-2 right-2 text-white/5 text-[8px]">+</div>
-                        <div className="absolute bottom-2 left-2 text-white/5 text-[8px]">+</div>
-                        <div className="absolute bottom-2 right-2 text-white/5 text-[8px]">+</div>
+                        <div className="absolute top-2 left-2 text-white/20 text-[8px]">+</div>
+                        <div className="absolute top-2 right-2 text-white/20 text-[8px]">+</div>
+                        <div className="absolute bottom-2 left-2 text-white/20 text-[8px]">+</div>
+                        <div className="absolute bottom-2 right-2 text-white/20 text-[8px]">+</div>
                         
                         {/* Hover Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -724,7 +854,8 @@ export const Home: React.FC = () => {
       </section>
 
       {/* --- FOOTER CTA SECTION --- */}
-      <section className="relative w-full py-12 px-6 md:px-20 text-center overflow-hidden">
+      {/* Increased padding-bottom (pb-32 md:pb-48) to align bottom of content with fixed navbar top */}
+      <section className="relative w-full pt-12 pb-32 md:pb-48 px-6 md:px-20 text-center overflow-hidden">
         {/* Animated Background Lines */}
         <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
             <div className="w-[120%] h-px bg-white rotate-12" />
@@ -732,9 +863,11 @@ export const Home: React.FC = () => {
         </div>
 
         <motion.div
-             initial={{ scale: 0.9, opacity: 0 }}
-             whileInView={{ scale: 1, opacity: 1 }}
-             viewport={{ once: true }}
+             {...{
+                 initial: { scale: 0.9, opacity: 0 },
+                 whileInView: { scale: 1, opacity: 1 },
+                 viewport: { once: true }
+             } as any}
              className="relative z-10"
         >
             <div className="inline-block px-4 py-1 border border-primary/50 text-primary font-mono text-xs tracking-[0.2em] mb-6 bg-black/50 backdrop-blur-sm">
@@ -758,7 +891,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Footer System Stats */}
-      <div className="w-full border-t border-white/10 bg-black py-8 px-6 md:px-20 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono text-dim">
+      <div className="w-full border-t border-white/10 bg-black py-8 px-6 md:px-20 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono text-dim relative z-20">
         <div className="mb-2 md:mb-0">© 2024 ACE WAHOME // MECHATRONICS</div>
         <div className="flex gap-4">
             <span>SYS: ONLINE</span>

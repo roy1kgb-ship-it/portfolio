@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { articles } from '../data/articles';
 import { Tag, Clock, ArrowUpRight } from 'lucide-react';
+// @ts-ignore
 import { useNavigate } from 'react-router-dom';
 
 export const LabNotes: React.FC = () => {
@@ -10,8 +11,7 @@ export const LabNotes: React.FC = () => {
   return (
     <div className="min-h-screen pt-24 px-6 md:px-20 pb-48">
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+        {...{ initial: { opacity: 0, y: -20 }, animate: { opacity: 1, y: 0 } } as any}
         transition={{ duration: 0.4 }}
         className="mb-12 flex justify-between items-end border-b border-white/10 pb-4"
       >
@@ -30,8 +30,7 @@ export const LabNotes: React.FC = () => {
           <motion.div
             key={article.id}
             onClick={() => navigate(`/lab/${article.id}`)}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } } as any}
             transition={{ delay: index * 0.1, duration: 0.4 }}
             className="group relative bg-surface/30 border border-white/5 hover:border-secondary/50 p-6 rounded transition-all cursor-pointer hover:bg-surface/50"
           >

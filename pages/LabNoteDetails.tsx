@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-ignore
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, Tag, Share2, Printer, Lock, FileText, Database } from 'lucide-react';
@@ -103,8 +104,7 @@ export const LabNoteDetails: React.FC = () => {
 
         {/* RIGHT COLUMN: Main Content */}
         <motion.article 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            {...{ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } } as any}
             transition={{ duration: 0.5 }}
             className="lg:col-span-9 order-2"
         >

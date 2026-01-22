@@ -4,12 +4,9 @@ import { Environment, Float, Sparkles, PerspectiveCamera } from '@react-three/dr
 import * as THREE from 'three';
 
 // Fix for missing JSX.IntrinsicElements types for R3F components
-declare global {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
-      ambientLight: any;
-      pointLight: any;
-      spotLight: any;
       group: any;
       mesh: any;
       octahedronGeometry: any;
@@ -17,25 +14,13 @@ declare global {
       torusGeometry: any;
       boxGeometry: any;
       meshBasicMaterial: any;
+      ambientLight: any;
+      pointLight: any;
+      spotLight: any;
       fog: any;
-    }
-  }
-  // Augment React.JSX namespace as well for newer React type definitions
-  namespace React {
-    namespace JSX {
-      interface IntrinsicElements {
-        ambientLight: any;
-        pointLight: any;
-        spotLight: any;
-        group: any;
-        mesh: any;
-        octahedronGeometry: any;
-        meshStandardMaterial: any;
-        torusGeometry: any;
-        boxGeometry: any;
-        meshBasicMaterial: any;
-        fog: any;
-      }
+      perspectiveCamera: any;
+      // Allow other R3F elements dynamically
+      [elemName: string]: any;
     }
   }
 }

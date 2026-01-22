@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-ignore
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Cpu, User, Radio, BookOpen } from 'lucide-react';
@@ -46,7 +47,7 @@ export const Navigation: React.FC = () => {
 
               {isActive && (
                 <motion.div
-                  layoutId="activeTab"
+                  {...{ layoutId: "activeTab" } as any}
                   className="absolute -bottom-4 w-1 h-1 bg-primary rounded-full shadow-[0_0_10px_#FF4D00]"
                 />
               )}

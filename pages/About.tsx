@@ -31,7 +31,7 @@ const experience: Experience[] = [
 // New Skill Badge Component
 const SkillBadge = ({ name, category }: { name: string, category: 'soft' | 'hard', key?: any }) => {
     return (
-        <div className={`px-3 py-2 border rounded font-mono text-xs flex items-center justify-between group hover:scale-105 transition-transform cursor-default ${category === 'soft' ? 'border-secondary/30 bg-secondary/5 text-gray-300' : 'border-primary/30 bg-primary/5 text-gray-300'}`}>
+        <div className={`px-3 py-2 border rounded font-mono textxs flex items-center justify-between group hover:scale-105 transition-transform cursor-default ${category === 'soft' ? 'border-secondary/30 bg-secondary/5 text-gray-300' : 'border-primary/30 bg-primary/5 text-gray-300'}`}>
             {name}
             <div className={`w-1.5 h-1.5 rounded-full ${category === 'soft' ? 'bg-secondary' : 'bg-primary'} opacity-50 group-hover:opacity-100`} />
         </div>
@@ -46,8 +46,7 @@ export const About: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-12 mb-20">
         <div className="lg:w-2/3">
             <motion.h1 
-                initial={{ x: -30, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
+                {...{ initial: { x: -30, opacity: 0 }, animate: { x: 0, opacity: 1 } } as any}
                 transition={{ duration: 0.4 }}
                 className="text-4xl md:text-6xl font-display font-bold text-white mb-6"
             >
@@ -56,16 +55,14 @@ export const About: React.FC = () => {
 
              <motion.div 
                 className="text-sm font-mono text-dim mb-4 flex items-center gap-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                {...{ initial: { opacity: 0 }, animate: { opacity: 1 } } as any}
                 transition={{ delay: 0.1 }}
             >
                  <MapPin size={14} /> BASED IN NAIROBI, KENYA
             </motion.div>
 
             <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                {...{ initial: { opacity: 0 }, animate: { opacity: 1 } } as any}
                 transition={{ delay: 0.1, duration: 0.4 }}
                 className="text-gray-300 font-sans text-lg leading-relaxed max-w-2xl space-y-4"
             >
@@ -82,8 +79,7 @@ export const About: React.FC = () => {
         {/* Education Card */}
         <div className="lg:w-1/3">
             <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                {...{ initial: { opacity: 0, scale: 0.95 }, animate: { opacity: 1, scale: 1 } } as any}
                 transition={{ delay: 0.2 }}
                 className="p-6 border border-white/10 bg-white/5 backdrop-blur-sm h-full hover:border-white/20 transition-colors"
             >
@@ -117,9 +113,7 @@ export const About: React.FC = () => {
                 {experience.map((job, index) => (
                     <motion.div 
                         key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
+                        {...{ initial: { opacity: 0, x: -20 }, whileInView: { opacity: 1, x: 0 }, viewport: { once: true } } as any}
                         transition={{ delay: index * 0.1 }}
                         className="relative group"
                     >

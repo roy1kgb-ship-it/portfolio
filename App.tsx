@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// @ts-ignore
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';

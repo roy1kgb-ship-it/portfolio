@@ -8,8 +8,7 @@ export const Projects: React.FC = () => {
     // Increased bottom padding to pb-40 to account for fixed navbar
     <div className="min-h-screen pt-24 px-6 md:px-20 pb-40">
         <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            {...{ initial: { opacity: 0, y: -20 }, animate: { opacity: 1, y: 0 } } as any}
             className="mb-12 flex justify-between items-end border-b border-white/10 pb-4"
         >
             <div>

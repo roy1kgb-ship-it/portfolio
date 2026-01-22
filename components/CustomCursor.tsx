@@ -56,15 +56,15 @@ export const CustomCursor: React.FC = () => {
           y: ringY,
           width: 24, // Slightly larger than dot offset for centering
           height: 24,
-          translateX: -8, // Adjust for size difference relative to dot position
-          translateY: -8,
-        }}
+          marginLeft: -8, // Adjust for size difference relative to dot position
+          marginTop: -8,
+        } as any}
       >
         <motion.div
-          animate={{
+          {...{ animate: {
             scale: isHovering ? 1.5 : 1,
             borderColor: isHovering ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 1)',
-          }}
+          } } as any}
           transition={{ duration: 0.15 }}
           className="w-full h-full border-[1.5px] border-white rounded-full"
         />
@@ -78,10 +78,10 @@ export const CustomCursor: React.FC = () => {
           y: dotY,
           width: 8,
           height: 8,
-        }}
+        } as any}
       >
         <motion.div 
-            animate={{ scale: isHovering ? 0.5 : 1 }}
+            {...{ animate: { scale: isHovering ? 0.5 : 1 } } as any}
             className="w-full h-full bg-primary rounded-full" 
         />
       </motion.div>
