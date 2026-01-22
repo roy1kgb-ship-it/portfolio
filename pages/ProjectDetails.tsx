@@ -74,7 +74,7 @@ export const ProjectDetails: React.FC = () => {
             </div>
             <div className="text-left md:text-right">
                 <div className="text-xs font-mono text-dim">AUTHOR</div>
-                <div className="text-sm font-mono text-gray-300">ACE WAHOME</div>
+                <div className="text-sm font-mono text-gray-300">ROY WAHOME</div>
             </div>
         </div>
       </div>

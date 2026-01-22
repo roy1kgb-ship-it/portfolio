@@ -8,7 +8,7 @@ interface BootSequenceProps {
 const bootText = [
   "BIOS DATE 01/15/2024 14:22:54 VER 1.0.4",
   "CPU: ARMv8 64-bit Processor",
-  "DETECTING PRIMARY MASTER ... ACE_WAHOME_CORE",
+  "DETECTING PRIMARY MASTER ... ROY_WAHOME_CORE",
   "DETECTING PRIMARY SLAVE ... PORTFOLIO_DATA",
   "MEMORY TEST: 64438K OK",
   "Loading drivers ...",

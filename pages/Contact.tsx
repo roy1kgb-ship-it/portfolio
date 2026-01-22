@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 export const Contact: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const email = "ace.wahome@engineer.com";
+  const email = "roy.wahome@engineer.com";
 
   // Form State
   const [formState, setFormState] = useState<ContactFormData>({ name: '', email: '', message: '' });
@@ -97,7 +97,7 @@ export const Contact: React.FC = () => {
                         SIGNAL_STRENGTH: STRONG
                     </div>
                     <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-4">ESTABLISH <span className="text-primary">UPLINK</span></h1>
-                    <p className="text-gray-400 font-sans leading-relaxed">
+                    <p className="text-gray-300 font-sans leading-relaxed">
                         Secure channel open for engineering inquiries, research collaboration, and classified project proposals.
                     </p>
                 </motion.div>
@@ -107,7 +107,7 @@ export const Contact: React.FC = () => {
                         <label className="block text-[10px] font-mono text-secondary mb-1">DIRECT_FREQUENCY (EMAIL)</label>
                         <div className="flex items-center justify-between bg-black/50 border border-white/10 p-4 rounded hover:border-secondary transition-colors">
                             <span className="font-mono text-lg text-white">{email}</span>
-                            {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} className="text-gray-500 group-hover:text-secondary" />}
+                            {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} className="text-gray-400 group-hover:text-secondary" />}
                         </div>
                     </div>
 
@@ -275,7 +275,7 @@ export const Contact: React.FC = () => {
         >
             <div className="flex flex-col items-center gap-2">
                 <div className="w-px h-12 bg-gradient-to-b from-transparent via-gray-500 to-transparent" />
-                <span className="text-[10px] font-mono text-gray-600">AUTHORIZED PERSONNEL ONLY</span>
+                <span className="text-[10px] font-mono text-gray-500">AUTHORIZED PERSONNEL ONLY</span>
             </div>
         </motion.div>
 

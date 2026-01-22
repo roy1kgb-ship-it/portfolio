@@ -228,9 +228,9 @@ const RoboticArmTerminal = () => {
                     {status === 'MOVING' ? 'SERVO_ACTUATION' : 'TARGET_LOCKED'}
                 </span>
             </div>
-            <span className="text-gray-600 hidden sm:inline-block">IK_SOLVER_V2.1</span>
+            <span className="text-gray-400 hidden sm:inline-block">IK_SOLVER_V2.1</span>
         </div>
-        <div className="flex gap-6 text-[11px] text-gray-500">
+        <div className="flex gap-6 text-[11px] text-gray-400">
             <span className="flex items-center gap-2"><RefreshCw size={12} className={status === 'MOVING' ? 'animate-spin' : ''} /> <span>AUTO_CYCLE</span></span>
             <span>MEM: 64KB</span>
         </div>
@@ -252,7 +252,7 @@ const RoboticArmTerminal = () => {
                     <div className="flex flex-col text-dim select-none text-right min-w-[20px] opacity-50">
                        {Array.from({length: 12}).map((_, i) => <div key={i}>{i + 84}</div>)}
                     </div>
-                    <div className="text-gray-400 font-medium whitespace-pre">
+                    <div className="text-gray-300 font-medium whitespace-pre">
                         <div><span className="text-gray-500">// Solve Inverse Kinematics for 2-Link Planar</span></div>
                         <div><span className="text-purple-400">void</span> <span className="text-blue-400">solveIK</span>(<span className="text-yellow-500">float</span> x, <span className="text-yellow-500">float</span> y) {'{'}</div>
                         <div>  <span className="text-gray-500">// Calculate Distance to Target</span></div>
@@ -340,7 +340,7 @@ const RoboticArmTerminal = () => {
 
                 {/* Overlay Data */}
                 <div className="absolute bottom-4 right-4 text-right bg-black/50 p-2 rounded backdrop-blur-sm border border-white/5">
-                    <div className="text-[9px] text-gray-500 mb-1">END_EFFECTOR_POS</div>
+                    <div className="text-[9px] text-gray-400 mb-1">END_EFFECTOR_POS</div>
                     <div className="text-xs font-mono text-white flex gap-3">
                         <span>X: {currentEE.x.toFixed(1)}</span>
                         <span>Y: {Math.abs(currentEE.y - 100).toFixed(1)}</span>
@@ -570,17 +570,18 @@ export const Home: React.FC = () => {
                 </div>
             </div>
 
-            <div className="col-span-1 md:col-span-11">
+            <div className="col-span-1 md:col-span-11 mt-8 md:mt-0">
                 {/* Intro Tag - Reduced gap here */}
+                {/* MODIFIED: Changed -top-5 to relative spacing to prevent cutoff at top of screen */}
                 <motion.div 
                     {...{
                         initial: { width: 0 },
                         animate: { width: '100px' },
                         transition: { duration: 1, ease: 'circOut' }
                     } as any}
-                    className="h-[1px] bg-primary mb-6 relative"
+                    className="h-[1px] bg-primary mb-6 relative mt-6"
                 >
-                    <span className="absolute -top-5 left-0 text-[10px] font-mono text-primary">SYS.INIT_COMPLETE</span>
+                    <span className="absolute -top-6 left-0 text-xs font-mono text-primary font-bold">SYS.INIT_COMPLETE</span>
                 </motion.div>
 
                 {/* Main Title */}
@@ -594,7 +595,7 @@ export const Home: React.FC = () => {
                     >
                         {/* Adjusted text size for mobile compatibility */}
                         <h1 className="text-6xl sm:text-7xl md:text-[10rem] font-display font-bold tracking-tighter text-white leading-[0.85]">
-                            ACE
+                            ROY
                             <br />
                             <span 
                                 className="ml-0 md:ml-12 text-white/5 transition-colors duration-500 hover:text-white/20"
@@ -673,22 +674,22 @@ export const Home: React.FC = () => {
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm group hover:border-primary/50 transition-colors">
                             <Cpu className="text-dim mb-2 group-hover:text-primary transition-colors" size={20} />
                             <div className="text-2xl md:text-3xl font-display font-bold text-white">2+</div>
-                            <div className="text-[10px] font-mono text-gray-500">YEARS EXP</div>
+                            <div className="text-[10px] font-mono text-gray-400">YEARS EXP</div>
                         </div>
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm group hover:border-secondary/50 transition-colors">
                             <Globe className="text-dim mb-2 group-hover:text-secondary transition-colors" size={20} />
                             <div className="text-2xl md:text-3xl font-display font-bold text-white">12+</div>
-                            <div className="text-[10px] font-mono text-gray-500">PROJECTS</div>
+                            <div className="text-[10px] font-mono text-gray-400">PROJECTS</div>
                         </div>
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm group hover:border-green-500/50 transition-colors">
                             <Activity className="text-dim mb-2 group-hover:text-green-500 transition-colors" size={20} />
                             <div className="text-xl md:text-2xl font-display font-bold text-white uppercase tracking-tight">CAD / CAM</div>
-                            <div className="text-[10px] font-mono text-gray-500">SKILLSET</div>
+                            <div className="text-[10px] font-mono text-gray-400">SKILLSET</div>
                         </div>
                         <div className="bg-black/40 border border-white/10 p-4 md:p-6 backdrop-blur-sm">
                             <Database className="text-dim mb-2" size={20} />
                             <div className="text-xl md:text-2xl font-display font-bold text-white uppercase tracking-tight">RAPID PROTO</div>
-                            <div className="text-[10px] font-mono text-gray-500">SPECIALIZATION</div>
+                            <div className="text-[10px] font-mono text-gray-400">SPECIALIZATION</div>
                         </div>
                     </motion.div>
                 </div>
@@ -728,10 +729,10 @@ export const Home: React.FC = () => {
                 </div>
                 
                 <h2 className="text-4xl md:text-7xl font-display font-bold leading-tight">
-                    CODE THAT <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">MOVES MATTER</span>
+                    CODE THAT <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">MOVES MATTER</span>
                 </h2>
                 
-                <p className="text-gray-400 text-lg md:text-xl leading-relaxed">
+                <p className="text-gray-300 text-lg md:text-xl leading-relaxed">
                     Modern engineering isn't just about assembling parts or writing scripts in isolation. It's about the <span className="text-white font-bold">symbiosis</span> of mechanical precision and algorithmic intelligence.
                 </p>
             </motion.div>
@@ -892,7 +893,7 @@ export const Home: React.FC = () => {
 
       {/* Footer System Stats */}
       <div className="w-full border-t border-white/10 bg-black py-8 px-6 md:px-20 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono text-dim relative z-20">
-        <div className="mb-2 md:mb-0">© 2024 ACE WAHOME // MECHATRONICS</div>
+        <div className="mb-2 md:mb-0">© 2024 ROY WAHOME // MECHATRONICS</div>
         <div className="flex gap-4">
             <span>SYS: ONLINE</span>
             <span>RENDER: WEBGL 2.0</span>

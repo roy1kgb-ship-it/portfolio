@@ -56,25 +56,25 @@ export const LabNoteDetails: React.FC = () => {
 
                     <div className="space-y-4">
                         <div>
-                            <div className="text-[10px] font-mono text-gray-500 uppercase">FILE_ID</div>
+                            <div className="text-[10px] font-mono text-gray-400 uppercase">FILE_ID</div>
                             <div className="text-sm font-mono text-white">{article.id.toUpperCase()}</div>
                         </div>
                         <div>
-                            <div className="text-[10px] font-mono text-gray-500 uppercase">DATE_LOGGED</div>
+                            <div className="text-[10px] font-mono text-gray-400 uppercase">DATE_LOGGED</div>
                             <div className="text-sm font-mono text-white flex items-center gap-2">
                                 <Calendar size={12} className="text-secondary" />
                                 {article.date}
                             </div>
                         </div>
                         <div>
-                            <div className="text-[10px] font-mono text-gray-500 uppercase">EST_READ_TIME</div>
+                            <div className="text-[10px] font-mono text-gray-400 uppercase">EST_READ_TIME</div>
                             <div className="text-sm font-mono text-white flex items-center gap-2">
                                 <Clock size={12} className="text-primary" />
                                 {article.readTime}
                             </div>
                         </div>
                          <div>
-                            <div className="text-[10px] font-mono text-gray-500 uppercase">CLASSIFICATION</div>
+                            <div className="text-[10px] font-mono text-gray-400 uppercase">CLASSIFICATION</div>
                             <div className="text-sm font-mono text-white flex items-center gap-2">
                                 <Tag size={12} className="text-green-500" />
                                 {article.tag}
@@ -163,9 +163,9 @@ export const LabNoteDetails: React.FC = () => {
             {/* Footer Signature */}
             <div className="mt-12 flex items-center justify-between border-t border-white/10 pt-8">
                 <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center font-display font-bold text-white">AW</div>
+                    <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center font-display font-bold text-white">RW</div>
                     <div>
-                        <div className="text-sm text-white font-bold">ACE WAHOME</div>
+                        <div className="text-sm text-white font-bold">ROY WAHOME</div>
                         <div className="text-xs text-dim font-mono">MECHATRONICS STUDENT</div>
                     </div>
                 </div>

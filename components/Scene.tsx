@@ -4,7 +4,7 @@ import { Environment, Float, Sparkles, PerspectiveCamera } from '@react-three/dr
 import * as THREE from 'three';
 
 // Fix for missing JSX.IntrinsicElements types for R3F components
-declare module 'react' {
+declare global {
   namespace JSX {
     interface IntrinsicElements {
       group: any;

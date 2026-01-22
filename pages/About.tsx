@@ -67,7 +67,7 @@ export const About: React.FC = () => {
                 className="text-gray-300 font-sans text-lg leading-relaxed max-w-2xl space-y-4"
             >
                 <p>
-                    <span className="text-primary font-bold">Ace Wahome</span>. Mechatronics Engineering Student.
+                    <span className="text-primary font-bold">Roy Wahome</span>. Mechatronics Engineering Student.
                     My work sits at the precise intersection of mechanical design, electrical integration, and intelligent control systems.
                 </p>
                 <p>
@@ -94,7 +94,7 @@ export const About: React.FC = () => {
                 </div>
                 <div>
                     <div className="text-sm font-bold text-white">Relevant Coursework:</div>
-                    <p className="text-xs text-gray-500 font-mono mt-2 leading-relaxed">
+                    <p className="text-xs text-gray-400 font-mono mt-2 leading-relaxed">
                         Control Systems II, Industrial Automation, Embedded Logic, Dynamics of Machinery, Machine Vision, Finite Element Analysis.
                     </p>
                 </div>
@@ -122,10 +122,10 @@ export const About: React.FC = () => {
                         
                         <div className="flex justify-between items-baseline mb-2">
                             <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">{job.role}</h3>
-                            <span className="text-xs font-mono text-gray-500">{job.period}</span>
+                            <span className="text-xs font-mono text-gray-400">{job.period}</span>
                         </div>
                         <div className="text-sm text-primary mb-2 font-mono">{job.company}</div>
-                        <p className="text-gray-400 text-sm leading-relaxed">
+                        <p className="text-gray-300 text-sm leading-relaxed">
                             {job.description}
                         </p>
                     </motion.div>

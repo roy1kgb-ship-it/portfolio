@@ -122,7 +122,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       {/* Content */}
       <div className="p-6 relative z-10 flex flex-col flex-grow justify-between">
         <div>
-            <p className="text-sm font-sans text-gray-400 mb-6 leading-relaxed line-clamp-3">
+            <p className="text-sm font-sans text-gray-300 mb-6 leading-relaxed line-clamp-3">
                 {project.description}
             </p>
 
@@ -141,7 +141,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         <div className="flex items-center gap-3 flex-wrap pt-4 border-t border-white/5">
             <FileCode size={12} className="text-dim" />
             {project.tech.slice(0, 4).map((t) => (
-                <span key={t} className="text-[10px] font-mono text-gray-500 bg-white/5 px-1.5 rounded">
+                <span key={t} className="text-[10px] font-mono text-gray-400 bg-white/5 px-1.5 rounded">
                     {t}
                 </span>
             ))}
